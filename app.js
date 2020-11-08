@@ -47,7 +47,7 @@ function currentWeather(searchvalue) {
   })
   function currentWeather(searchvalue) {
     $.ajax({
-      url: "http://api.openweathermap.org/data/2.5/uvi?lat="+ response.coord.lat +"&lon="+ response.coord.lon +"&appid=61be8bbc2bd8de4245c33d2aa432b3d1",
+      url: "http://api.openweathermap.org/data/2.5/uvi?lat=latitude&lon=longitude&appid=61be8bbc2bd8de4245c33d2aa432b3d1",
       method: "GET"
     }).then(function(data) {
       console.log(data);
