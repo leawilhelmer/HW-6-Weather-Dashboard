@@ -1,6 +1,6 @@
 # 06 Server-Side APIs: Weather Dashboard
 
-## What I can do with this Webstie
+## This is what I can search in this Website
 
 ```
 GIVEN a weather dashboard with form inputs
