@@ -1,49 +1,82 @@
-var fetchButton = document.querySelector('#submit');
+var fetchButton = document.querySelector('#search');
+var search = document.querySelector('#searchvalue')
+//var weatherIcon = `https:///openweathermap.org/img/w/${obj.key}.png`
+function init(){
+  var storedCities = JSON.parse(localStorage.getItem("cities"));
 
-// function getApi() {
-//     var requestUrl = 'https://api.openweathermap.org/data/2.5/forecast/daily?q=delhi&cnt=5&appid=61be8bbc2bd8de4245c33d2aa432b3d1';
+  if (storedCities !== null) {
+      cities = storedCities;
+    }
+  renderCities();
+}
 
-// fetch(requestUrl)
-// .then(function (response) {
-//     return response.json();
-//   })
-//   .then(function(data) {
-//     for (var i = 0; i < data.length; i++) {
-//         var listItem = document.createElement('li');
-//         listItem.textContent = data[i].html_url;
-//         repoList.appendChild(listItem);
-//   }
-// });
-// }
+function storeCities(){
+localStorage.setItem("cities", JSON.stringify(cities));
+console.log(localStorage);
 
-// fetchButton.addEventListener('click', getApi);
+}
+function FormatDay(date){
+    var date = new Date();
+    var month = date.getMonth()+1;
+    var day = date.getDate();
+    
+    var dayOutput = date.getFullYear() + '/' +
+        (month<10 ? '0' : '') + month + '/' +
+        (day<10 ? '0' : '') + day;
+    return dayOutput;
+}
 
-var formSubmitHandler = function (event) {
-    event.preventDefault();
-  
-  
-  var getUserRepos = function (user) {
-    var apiUrl = 'https://api.openweathermap.org/data/2.5/forecast/daily?q=delhi&cnt=5&appid=61be8bbc2bd8de4245c33d2aa432b3d1' + user + '/repos';
-  
-    fetch(apiUrl)
-      .then(function (response) {
-        if (response.ok) {
-          console.log(response);
-          response.json().then(function (data) {
-            console.log(data);
-            displayRepos(data, user);
-          });
-        } else {
-          alert('Error: ' + response.statusText);
-        }
-      })
-      .catch(function (error) {
-        alert('Unable to connect to weather');
-      });
-  };
 
-  };
-  
-  fetchButton.addEventListener('#submit', formSubmitHandler);
-  
-  
+$(document).ready(function(){
+  $('#search').on("click", function () {
+  var searchvalue = $('#searchvalue').val();
+  currentWeather(searchvalue);
+})
+function currentWeather(searchvalue) {
+  $.ajax({
+    url: "https://api.openweathermap.org/data/2.5/weather?q="+searchvalue+"&appid=61be8bbc2bd8de4245c33d2aa432b3d1&units=imperial",
+    method: "GET"
+  }).then(function(data) {
+    console.log(data);
+    $("#today").empty();
+    var cityname = $("<h3>").addClass("City").text(data.name + " "+ FormatDay());
+    $(".card-body").append(cityname);
+    var temperature = $("<p>").addClass("Temperature").text("Temperature: "+ data.main.temp + " °F");
+    $(".card-body").append(temperature);
+    var humidity = $("<p>").addClass("Humidity").text("Humidity: "+ data.main.humidity + " %");
+    $(".card-body").append(humidity);
+    var wind = $("<p>").addClass("Wind").text("Wind Speed: "+ data.wind.speed + " MPH");
+    $(".card-body").append(wind)
+  })
+  function currentWeather(searchvalue) {
+    $.ajax({
+      url: "http://api.openweathermap.org/data/2.5/uvi?lat=${searchvalue.lat}&lon=${searchvalue.lon}&appid=61be8bbc2bd8de4245c33d2aa432b3d1",
+      method: "GET"
+    }).then(function(data) {
+      console.log(data);
+      var UVindex = $("<p>").addClass("UVindex").text(uvResponse);
+    $(".card-body").append(UVindex)
+    })
+  }
+}
+})
+
+$(document).ready(function(){
+  $('#search').on("click", function () {
+  var searchvalue = $('#searchvalue').val();
+  weatherForecast(searchvalue);
+})
+function weatherForecast(searchvalue) {
+  $.ajax({
+    url: "https://api.openweathermap.org/data/2.5/forecast?q="+searchvalue+"&appid=61be8bbc2bd8de4245c33d2aa432b3d1&units=imperial",
+    method: "GET"
+  }).then(function(data){
+    console.log(data);
+    $("#forecast").html("<h4 class=\"mt-3\">5-Day Forecast:</h4>").append("<div class=\"row\">");
+    var temperature = $("<p>").addClass("Temperature").text("Temp: "+ temperature + " °F");
+    var humidity = $("<p>").addClass("Humidity").text("Humidity: "+ humidity + " %");
+    // $(".card-body").append(temperature);
+  })
+}
+})
+
