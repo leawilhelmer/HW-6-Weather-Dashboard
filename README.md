@@ -1,6 +1,6 @@
 # HW-6-Weather-Dashboard
 using OpenWeather API to retrieve weather data for cities
-\
+
 ## This is what I can search in this Website
 
 ```
