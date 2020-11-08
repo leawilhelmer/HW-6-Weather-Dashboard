@@ -17,3 +17,4 @@ WHEN I click on a city in the search history
 THEN I am again presented with current and future conditions for that city
 ```
 ![Screenshot (9)](https://user-images.githubusercontent.com/70493940/98485944-f0b05680-21ce-11eb-8811-a011af8a5484.png)
+![Screenshot (10)](https://user-images.githubusercontent.com/70493940/98485973-2fdea780-21cf-11eb-8bba-ef2c058167d3.png)
