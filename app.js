@@ -1,20 +1,17 @@
 var fetchButton = document.querySelector('#search');
 var search = document.querySelector('#searchvalue')
-//var weatherIcon = `https:///openweathermap.org/img/w/${obj.key}.png`
-function init(){
+
+
+function initCityList() {
   var storedCities = JSON.parse(localStorage.getItem("cities"));
-
+  
   if (storedCities !== null) {
-      cities = storedCities;
-    }
+      cityList = storedCities;
+  }
+  
   renderCities();
-}
+  }
 
-function storeCities(){
-localStorage.setItem("cities", JSON.stringify(cities));
-console.log(localStorage);
-
-}
 function FormatDay(date){
     var date = new Date();
     var month = date.getMonth()+1;
@@ -46,14 +43,15 @@ function currentWeather(searchvalue) {
     $(".card-body").append(humidity);
     var wind = $("<p>").addClass("Wind").text("Wind Speed: "+ data.wind.speed + " MPH");
     $(".card-body").append(wind)
+    
   })
   function currentWeather(searchvalue) {
     $.ajax({
-      url: "http://api.openweathermap.org/data/2.5/uvi?lat=${searchvalue.lat}&lon=${searchvalue.lon}&appid=61be8bbc2bd8de4245c33d2aa432b3d1",
+      url: "http://api.openweathermap.org/data/2.5/uvi?lat="+ response.coord.lat +"&lon="+ response.coord.lon +"&appid=61be8bbc2bd8de4245c33d2aa432b3d1",
       method: "GET"
     }).then(function(data) {
       console.log(data);
-      var UVindex = $("<p>").addClass("UVindex").text(uvResponse);
+      var UVindex = $("<p>").addClass("UVindex").text("UV Index: "+ + "");
     $(".card-body").append(UVindex)
     })
   }
@@ -70,8 +68,7 @@ function weatherForecast(searchvalue) {
     url: "https://api.openweathermap.org/data/2.5/forecast?q="+searchvalue+"&appid=61be8bbc2bd8de4245c33d2aa432b3d1&units=imperial",
     method: "GET"
   }).then(function(data){
-    console.log(data);
-    $("#forecast").html("<h4 class=\"mt-3\">5-Day Forecast:</h4>").append("<div class=\"row\">");
+    $("#forecast").html("<h4 class=\"mt-4\">5-Day Forecast:</h4>").append("<div class=\"row\">");
     for (var i = 0; i < data.list.length; i++) {
 
       if (data.list[i].dt_txt.indexOf("15:00:00") !== -1) {
@@ -79,11 +76,11 @@ function weatherForecast(searchvalue) {
           var titleFive = $("<h3>").addClass("card-title").text(new Date(data.list[i].dt_txt).toLocaleDateString());
           var imgFive = $("<img>").attr("src", "https://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png");
 
-          var colFive = $("<div>").addClass("col-md-2");
+          var colFive = $("<div>").addClass("col-sm-2");
           var cardFive = $("<div>").addClass("card bg-primary text-white");
           var cardBodyFive = $("<div>").addClass("card-body p-2");
+          var tempFive = $("<p>").addClass("card-text").text("Temp: " + data.list[i].main.temp + " °F");
           var humidFive = $("<p>").addClass("card-text").text("Humidity: " + data.list[i].main.humidity + "%");
-          var tempFive = $("<p>").addClass("card-text").text("Temperature: " + data.list[i].main.temp + " °F");
 
           colFive.append(cardFive.append(cardBodyFive.append(titleFive, imgFive, tempFive, humidFive)));
           $("#forecast .row").append(colFive);
@@ -91,5 +88,4 @@ function weatherForecast(searchvalue) {
       }
   });
 }
-
 })
